@@ -4,8 +4,23 @@ import scipy.constants as spc
 from scipy.special import ellipk
 
 class cpwCalcs:
-    
+    """ cpwCalcs contains the methods necessary for calculating certain parameters of 
+    interest of a superconducting cpw structure. Solutions for the resonant frequency, 
+    characteristic impedance, phase constant, etc, are determined by solving the
+    cpw geometry analytically through conformal mapping.
+    """
     def __init__(self,width=0,gap=0,length=0,fo=0,er=0,h=None,t=0,pen_depth=None):
+        """ Constructor method. 
+
+        params: width       : conductor width
+                gap         : gap between conductor and ground plane
+                length      : conductor length
+                fo          : designed resonant frequency
+                er          : relative permittivity of substrate
+                h           : thiockness of substrate
+                t           : thickness of conductor thin film
+                pen_depth   : magnetic penetration depth
+        """
         self.__w = width
         self.__s = gap
         self.__l = length
@@ -21,16 +36,24 @@ class cpwCalcs:
             self.__eeff = self.effective_permittivity()
     
     def cpw_params(self):
+        """ cpw_params returns the geometric parameters of the cpw structure.
+
+        returns     : pandas dataframe
+        """
         dic = {'width':self.__w, 'gap':self.__s, 'length':self.__l,
         'h':self.__h, 't':self.__t, 'er': self.__er, 
         'pen_depth':self.__pen_depth}
 
-
-        df = pd.DataFrame(data=[dic])
-        return df
+        return pd.DataFrame(data=[dic])
 
     def elliptic_integral(self,h=None):
-        # Calculate the complete elliptic integral of the first kind
+        """elliptic_integral calculates the complete elliptic integral of the first kind
+        for a given cpw geometry as part of a conformal mapping strategy.
+
+        params  : h     : substrate thickness (opt)
+
+        returns : (Kk, Kkp)     : tuple 
+        """
         if not self.__h:
             k = self.__w / (self.__w + 2*self.__s)
             kp = np.sqrt(1-k**2)

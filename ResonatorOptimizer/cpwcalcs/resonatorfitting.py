@@ -48,3 +48,50 @@ class ResonatorFitting:
 
 #         return(sigma.value,centre.value,centre.value/sigma.value)       #Returns linewidth in GHz, centre in GHz and Q factor
         return df
+
+    def fit_3dB(self,freq,trace,freqbounds=()):
+
+        if np.any(np.iscomplex(trace)):
+                trace = trace.real
+        
+        if not any(freqbounds):
+            freqbounds = (min(freq),max(freq))
+
+        fcutl = [abs(i-freqbounds[0]) for i in freq]
+        fcutl = fcutl.index(min(fcutl))
+        fcuth = [abs(i-freqbounds[1]) for i in freq]
+        fcuth = fcuth.index(min(fcuth))
+
+        f = freq[fcutl:fcuth]
+        s = trace[fcutl:fcuth]
+
+        # Find resonant frequency
+        max_s = np.where(s==max(s))[0][0]
+        fo = f[max_s]
+        so = s[max_s]
+
+        # Split data into LHS and RHS components
+        flhs = f[0:max_s+1]
+        frhs = f[max_s:]
+
+        slhs = s[0:max_s+1]
+        srhs = s[max_s:]
+
+        # Get peak indices for LHS and RHS
+        so_lhs_idx = slhs[max_s]
+        so_rhs_idx = srhs[0]
+
+        low_3dB = slhs.flat[np.abs(slhs - (so_lhs_idx-3)).argmin()]
+        up_3dB = srhs.flat[np.abs(srhs - (so_lhs_idx-3)).argmin()]
+
+        flow = f[np.where(s==low_3dB)[0][0]]
+        fup = f[np.where(s==up_3dB)[0][0]]
+
+        BW = fup - flow
+
+        Q = fo / BW
+
+        dic = [{'center':fo,'fwhm':BW,'Q':Q}]
+        df = pd.DataFrame(data=dic)
+
+        return df
