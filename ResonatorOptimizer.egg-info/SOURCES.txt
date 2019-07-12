@@ -1,3 +1,4 @@
+README.md
 setup.py
 ResonatorOptimizer/__init__.py
 ResonatorOptimizer.egg-info/PKG-INFO
@@ -5,6 +6,8 @@ ResonatorOptimizer.egg-info/SOURCES.txt
 ResonatorOptimizer.egg-info/dependency_links.txt
 ResonatorOptimizer.egg-info/requires.txt
 ResonatorOptimizer.egg-info/top_level.txt
+ResonatorOptimizer/bragg/__init__.py
+ResonatorOptimizer/bragg/bragg.py
 ResonatorOptimizer/cpwcalcs/__init__.py
 ResonatorOptimizer/cpwcalcs/cpwcalcs.py
 ResonatorOptimizer/cpwcalcs/paramsweeps.py

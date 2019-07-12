@@ -5,7 +5,7 @@ from scipy.special import ellipk
 
 class cpwCalcs:
     
-    def __init__(self,width=0,gap=0,length=0,fo=0,er=0,h=None,t=0,pen_depth=None,wavelength=0):
+    def __init__(self,width=0,gap=0,length=0,fo=0,er=0,h=None,t=0,pen_depth=None):
         self.__w = width
         self.__s = gap
         self.__l = length
@@ -14,13 +14,21 @@ class cpwCalcs:
         self.__h = h
         self.__t = t
         self.__pen_depth=pen_depth
-        self.__lambda = wavelength
         
         if not self.__h:
             self.__eeff = (er + 1) /2
         elif self.__h:
             self.__eeff = self.effective_permittivity()
     
+    def cpw_params(self):
+        dic = {'width':self.__w, 'gap':self.__s, 'length':self.__l,
+        'h':self.__h, 't':self.__t, 'er': self.__er, 
+        'pen_depth':self.__pen_depth}
+
+
+        df = pd.DataFrame(data=[dic])
+        return df
+
     def elliptic_integral(self,h=None):
         # Calculate the complete elliptic integral of the first kind
         if not self.__h:
@@ -113,7 +121,7 @@ class cpwCalcs:
 
     def alpha(self,tan_d=0.005):
         eeff = self.effective_permittivity()
-        ad = (self.__er/np.sqrt(eeff)) * ((eeff-1)/(self.__er-1)) * (np.pi/2*self.__lambda) * tan_d
+        ad = (self.__er/np.sqrt(eeff)) * ((eeff-1)/(self.__er-1)) * (np.pi/self.wavelength()) * tan_d
         return ad
 
     def beta(self,freq):

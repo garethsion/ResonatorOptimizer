@@ -39,9 +39,9 @@ class Sparams:
 
     def get_s21(self,abcd,Rload,format):
         A = abcd.flat[0]
-        B = abcd.flat[0]
-        C = abcd.flat[0]
-        D = abcd.flat[0]
+        B = abcd.flat[1]
+        C = abcd.flat[2]
+        D = abcd.flat[3]
 
         s21 = 2 / (A + (B/Rload) + C*Rload + D)
 
