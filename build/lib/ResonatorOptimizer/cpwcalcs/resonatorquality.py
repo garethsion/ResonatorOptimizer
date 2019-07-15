@@ -1,5 +1,5 @@
 import numpy as np
-
+from .resonatorfitting import ResonatorFitting
 class ResonatorQuality:
     def __init__(self,freq,s21,length=1e-03,alpha=0):
         self.__freq = freq
@@ -7,12 +7,16 @@ class ResonatorQuality:
         self.__l = length
         self.__alpha = alpha
         return
+
+    def alpha(self,er,eeff,wavelength,tan_d=0.005):
+        ad = (er/np.sqrt(eeff)) * ((eeff-1)/(er-1)) * (np.pi/wavelength) * tan_d
+        return ad
     
     def Qint(self):
         return np.pi / (self.__alpha * 2 * self.__l)
     
     def Qext(self):
-        return 1/(1/self.Qloaded() - 1/self.Qint())
+        return 1/ ( (1/self.Qloaded()) - (1/self.Qint()) )
     
     def Qloaded(self):
         rfit = ResonatorFitting()

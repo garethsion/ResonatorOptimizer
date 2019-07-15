@@ -12,7 +12,7 @@ class Bragg:
         return
     
     def get_abcd(self,cpw,freq,length):
-        gamma = cpw.gamma(freq,tan_d=0)
+        gamma = cpw.gamma(freq,tan_d=0.005)
         Z0 = cpw.impedance_kinetic()
 
         sp = ro.Sparams(freq=freq,gamma=gamma,length=length,Z0=Z0)
