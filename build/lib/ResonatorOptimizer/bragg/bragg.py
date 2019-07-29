@@ -3,12 +3,13 @@ import numpy as np
 import pandas as pd
 
 class Bragg:
-    def __init__(self,fo,er,h,t,pen_depth):
+    def __init__(self,fo,er,h,t,pen_depth,no_mirrors=5):
         self.__fo = fo
         self.__er = er
         self.__h = h
         self.__t = t
         self.__pen_depth = pen_depth
+        self.__no_mirrors = no_mirrors
         return
     
     def get_abcd(self,cpw,freq,length):
@@ -30,7 +31,8 @@ class Bragg:
         
         mirror_lhs = [np.matmul(lowZ_abcd[i], highZ_abcd[i]) for i in range(len(freq))]
         mirror_rhs = [np.matmul(highZ_abcd[i], lowZ_abcd[i]) for i in range(len(freq))]
-        bragg = [np.matmul(mirror_lhs[i]**5, np.matmul(cav_abcd[i], mirror_rhs[i]**5)) for i in range(len(freq))]
+        bragg = [np.matmul(mirror_lhs[i]**self.__no_mirrors, np.matmul(cav_abcd[i], 
+        	mirror_rhs[i]**self.__no_mirrors)) for i in range(len(freq))]
 
         sp = ro.Sparams(freq=freq)
         bragg_s21 = sp.s21_from_abcd(bragg)

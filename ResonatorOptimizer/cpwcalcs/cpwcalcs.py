@@ -8,13 +8,29 @@ class cpwCalcs:
     interest of a superconducting cpw structure. Solutions for the resonant frequency, 
     characteristic impedance, phase constant, etc, are determined by solving the
     cpw geometry analytically through conformal mapping.
+
+    CHANGE_LOG
+    ----------
+
+    * 29/07/2019 - Changed resonant frequency method to accept different wavelength 
+                   cavities
+                 - Changed constructor method to accep a specification of the cpw
+                   desired electrical length.
+
+    TO_DO
+    -----
+
+    * 29/07/2019 - Ensure that the resonant frequency is only calculated for the correct 
+                   wavelength cpw
+                 - Include a method for printing out a snapshot of the cpw params
     """
-    def __init__(self,width=0,gap=0,length=0,fo=0,er=0,h=None,t=0,pen_depth=None):
+    def __init__(self,width=0,gap=0,length=0,elen=180,fo=0,er=0,h=None,t=0,pen_depth=None):
         """ Constructor method. 
 
         params: width       : conductor width
                 gap         : gap between conductor and ground plane
                 length      : conductor length
+                elen        : conductor electrical length (degrees)
                 fo          : designed resonant frequency
                 er          : relative permittivity of substrate
                 h           : thiockness of substrate
@@ -24,6 +40,7 @@ class cpwCalcs:
         self.__w = width
         self.__s = gap
         self.__l = length
+        self.__elen = elen
         self.__fo = fo
         self.__er = er
         self.__h = h
@@ -90,9 +107,10 @@ class cpwCalcs:
         return g
 
     def resonant_freq(self):
+        num_len = 360 / self.__elen
         Ll = self.Ltotal()
         Cl = self.capacitance_per_length()
-        return 1 / (2*self.__l*np.sqrt(np.array(Ll)*np.array(Cl)))
+        return 1 / (num_len*self.__l*np.sqrt(np.array(Ll)*np.array(Cl)))
 
     def wavelength(self,medium='freespace'):
         if medium == 'freespace':
