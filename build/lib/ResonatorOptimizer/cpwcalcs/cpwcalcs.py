@@ -56,18 +56,40 @@ class cpwCalcs:
 
         print('CPW with electrical length = ' + str(elen) + ' degrees')
     
-    def cpw_params(self):
+    def print_cpw_params(self):
         """ cpw_params returns the geometric parameters of the cpw structure.
 
         returns     : pandas dataframe
         """
         dic = {'width':self.__w, 'gap':self.__s, 'length':self.__l,
-        'h':self.__h, 't':self.__t, 'er': self.__er, 
+        'h':self.__h, 't':self.__t, 'er': self.__er, 'eeff':self.__eeff,
         'pen_depth':self.__pen_depth}
 
         df = pd.DataFrame(data=[dic])
 
         return df
+
+    def print_wave_params(self):
+        dic = {
+        'fo':self.resonant_freq(),
+        'wavelength':self.wavelength(),
+        'vp':self.phase_velocity(),
+        'phase_const':self.phase_constant()
+        }
+
+        return pd.DataFrame(data=[dic])
+
+    def print_electrical_params(self):
+        dic = {
+        'Lk':self.Lk(),
+        'Ltotal':self.total_inductance_per_length(),
+        'Ll':self.geometric_inductance_per_length(),
+        'Cl':self.capacitance_per_length(),
+        'Z':self.impedance_geometric(),
+        'Zki':self.impedance_kinetic(),
+        }
+
+        return pd.DataFrame(data=[dic])
 
     def elliptic_integral(self,h=None):
         """elliptic_integral calculates the complete elliptic integral of the first kind
@@ -114,7 +136,7 @@ class cpwCalcs:
 
     def resonant_freq(self):
         num_len = 360 / self.__elen
-        Ll = self.Ltotal()
+        Ll = self.total_inductance_per_length()
         Cl = self.capacitance_per_length()
         return 1 / (num_len*self.__l*np.sqrt(np.array(Ll)*np.array(Cl)))
 
@@ -129,15 +151,35 @@ class cpwCalcs:
             l = self.phase_velocity() / self.resonant_freq()
         return l
     
+    def phase_velocity(self):
+        if self.__t == 0:
+            Ll = self.geometric_inductance_per_length()
+        elif self.__t > 0:
+            Ll = self.total_inductance_per_length()
+        Cl = self.capacitance_per_length()
+        return 1 / np.sqrt(Ll*Cl)
+
+    def phase_constant(self):
+        if self.__t == 0:
+            Ll = self.geometric_inductance_per_length()
+        elif self.__t > 0:
+            Ll = self.total_inductance_per_length()
+        Cl = self.capacitance_per_length()
+        return self.__fo * np.sqrt(Ll*Cl)
+
+
+
+
+
     def Lk(self):
         Lk = (spc.mu_0 * ((self.__pen_depth**2)
                 /(self.__t*self.__w)) * self.g())
         return Lk
     
-    def Ltotal(self):
-        return self.Lk() + self.inductance_per_length()
+    def total_inductance_per_length(self):
+        return self.Lk() + self.geometric_inductance_per_length()
         
-    def inductance_per_length(self):
+    def geometric_inductance_per_length(self):
         Kk,Kkp = self.elliptic_integral()
         return (spc.mu_0/4) * Kkp / Kk
 
@@ -145,28 +187,16 @@ class cpwCalcs:
         Kk,Kkp = self.elliptic_integral()
         return 4*spc.epsilon_0*self.__eeff*(Kk / Kkp)
 
-    def impedance(self):
+    def impedance_geometric(self):
         Kk,Kkp = self.elliptic_integral()
         return ( ( 30 * np.pi ) / np.sqrt(self.__eeff) ) * (Kkp / Kk)
 
     def impedance_kinetic(self):
-        return np.sqrt(self.Ltotal() / self.capacitance_per_length())
+        return np.sqrt(self.total_inductance_per_length() / self.capacitance_per_length())
 
-    def phase_velocity(self):
-        if self.__t == 0:
-            Ll = self.inductance_per_length()
-        elif self.__t > 0:
-            Ll = self.Ltotal()
-        Cl = self.capacitance_per_length()
-        return 1 / np.sqrt(Ll*Cl)
 
-    def phase_constant(self):
-        if self.__t == 0:
-            Ll = self.inductance_per_length()
-        elif self.__t > 0:
-            Ll = self.Ltotal()
-        Cl = self.capacitance_per_length()
-        return self.__fo * np.sqrt(Ll*Cl)
+
+
 
     def alpha(self,tan_d=0.005):
         eeff = self.effective_permittivity()
@@ -174,7 +204,7 @@ class cpwCalcs:
         return ad
 
     def beta(self,freq):
-        Ll = self.Ltotal()
+        Ll = self.total_inductance_per_length()
         Cl = self.capacitance_per_length()
         return 2*np.pi*freq*np.sqrt(Ll*Cl)
 
@@ -215,12 +245,12 @@ class cpwCalcs:
 #         scpw.append(.5*(self.__total_width - wcpw[w-1]))
 #         cpw = super.CPWCalcs(wcpw[w-1],scpw[w-1],length,fo,er,h=h,t=t,pen_depth=pen_depth)
 #         Zcpw.append(cpw.impedance())
-#         Zki.append(np.sqrt(cpw.Ltotal() / cpw.capacitance_per_length()))
+#         Zki.append(np.sqrt(cpw.total_inductance_per_length() / cpw.capacitance_per_length()))
 
 #         Cl.append(cpw.capacitance_per_length())
-#         Ll.append(cpw.inductance_per_length())
+#         Ll.append(cpw.geometric_inductance_per_length())
 #         Lkl.append(cpw.Lk())
-#         Ltot.append(cpw.Ltotal())  
+#         Ltot.append(cpw.total_inductance_per_length())  
 #         vp.append(cpw.phase_velocity())
         
 #     res_freq = 1 / (2*self.__length*np.sqrt(np.array(Ltot)*np.array(Cl)))
