@@ -23,6 +23,8 @@ class cpwCalcs:
     * 29/07/2019 - Ensure that the resonant frequency is only calculated for the correct 
                    wavelength cpw
                  - Include a method for printing out a snapshot of the cpw params
+                 - Split class into two seperate classes, one for conformal mapping, 
+                   the other for calcs
     """
     def __init__(self,width=0,gap=0,length=0,elen=180,fo=0,er=0,h=None,t=0,pen_depth=None):
         """ Constructor method. 
@@ -51,6 +53,8 @@ class cpwCalcs:
             self.__eeff = (er + 1) /2
         elif self.__h:
             self.__eeff = self.effective_permittivity()
+
+        print('CPW with electrical length = ' + str(elen) + ' degrees')
     
     def cpw_params(self):
         """ cpw_params returns the geometric parameters of the cpw structure.
@@ -61,7 +65,9 @@ class cpwCalcs:
         'h':self.__h, 't':self.__t, 'er': self.__er, 
         'pen_depth':self.__pen_depth}
 
-        return pd.DataFrame(data=[dic])
+        df = pd.DataFrame(data=[dic])
+
+        return df
 
     def elliptic_integral(self,h=None):
         """elliptic_integral calculates the complete elliptic integral of the first kind
@@ -112,11 +118,13 @@ class cpwCalcs:
         Cl = self.capacitance_per_length()
         return 1 / (num_len*self.__l*np.sqrt(np.array(Ll)*np.array(Cl)))
 
-    def wavelength(self,medium='freespace'):
+    def wavelength(self,medium='cpw'):
         if medium == 'freespace':
-            l = 1/np.sqrt(self.__er) * spc.c
+            vp = spc.c/np.sqrt(self.__er)
+            l = vp / self.resonant_freq()
         elif medium == 'effective':
-            l = 1/np.sqrt(self.__eeff) * spc.c
+            vp = spc.c/np.sqrt(self.__eeff)
+            l = vp / self.resonant_freq()
         elif medium == 'cpw':
             l = self.phase_velocity() / self.resonant_freq()
         return l

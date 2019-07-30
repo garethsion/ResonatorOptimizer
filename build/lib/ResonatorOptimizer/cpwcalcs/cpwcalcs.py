@@ -8,13 +8,31 @@ class cpwCalcs:
     interest of a superconducting cpw structure. Solutions for the resonant frequency, 
     characteristic impedance, phase constant, etc, are determined by solving the
     cpw geometry analytically through conformal mapping.
+
+    CHANGE_LOG
+    ----------
+
+    * 29/07/2019 - Changed resonant frequency method to accept different wavelength 
+                   cavities
+                 - Changed constructor method to accep a specification of the cpw
+                   desired electrical length.
+
+    TO_DO
+    -----
+
+    * 29/07/2019 - Ensure that the resonant frequency is only calculated for the correct 
+                   wavelength cpw
+                 - Include a method for printing out a snapshot of the cpw params
+                 - Split class into two seperate classes, one for conformal mapping, 
+                   the other for calcs
     """
-    def __init__(self,width=0,gap=0,length=0,fo=0,er=0,h=None,t=0,pen_depth=None):
+    def __init__(self,width=0,gap=0,length=0,elen=180,fo=0,er=0,h=None,t=0,pen_depth=None):
         """ Constructor method. 
 
         params: width       : conductor width
                 gap         : gap between conductor and ground plane
                 length      : conductor length
+                elen        : conductor electrical length (degrees)
                 fo          : designed resonant frequency
                 er          : relative permittivity of substrate
                 h           : thiockness of substrate
@@ -24,6 +42,7 @@ class cpwCalcs:
         self.__w = width
         self.__s = gap
         self.__l = length
+        self.__elen = elen
         self.__fo = fo
         self.__er = er
         self.__h = h
@@ -34,6 +53,8 @@ class cpwCalcs:
             self.__eeff = (er + 1) /2
         elif self.__h:
             self.__eeff = self.effective_permittivity()
+
+        print('CPW with electrical length = ' + str(elen) + ' degrees')
     
     def cpw_params(self):
         """ cpw_params returns the geometric parameters of the cpw structure.
@@ -44,7 +65,9 @@ class cpwCalcs:
         'h':self.__h, 't':self.__t, 'er': self.__er, 
         'pen_depth':self.__pen_depth}
 
-        return pd.DataFrame(data=[dic])
+        df = pd.DataFrame(data=[dic])
+
+        return df
 
     def elliptic_integral(self,h=None):
         """elliptic_integral calculates the complete elliptic integral of the first kind
@@ -90,15 +113,18 @@ class cpwCalcs:
         return g
 
     def resonant_freq(self):
+        num_len = 360 / self.__elen
         Ll = self.Ltotal()
         Cl = self.capacitance_per_length()
-        return 1 / (2*self.__l*np.sqrt(np.array(Ll)*np.array(Cl)))
+        return 1 / (num_len*self.__l*np.sqrt(np.array(Ll)*np.array(Cl)))
 
-    def wavelength(self,medium='freespace'):
+    def wavelength(self,medium='cpw'):
         if medium == 'freespace':
-            l = 1/np.sqrt(self.__er) * spc.c
+            vp = spc.c/np.sqrt(self.__er)
+            l = vp / self.resonant_freq()
         elif medium == 'effective':
-            l = 1/np.sqrt(self.__eeff) * spc.c
+            vp = spc.c/np.sqrt(self.__eeff)
+            l = vp / self.resonant_freq()
         elif medium == 'cpw':
             l = self.phase_velocity() / self.resonant_freq()
         return l
