@@ -18,14 +18,10 @@ class CPW:
                  - Changed constructor method to accep a specification of the cpw
                    desired electrical length.
 
-    TO_DO
-    -----
-
-    * 29/07/2019 - Ensure that the resonant frequency is only calculated for the correct 
-                   wavelength cpw
-                 - Include a method for printing out a snapshot of the cpw params
-                 - Split class into two seperate classes, one for conformal mapping, 
+    * 31/07/2019 - Split class into two seperate classes, one for conformal mapping, 
                    the other for calcs
+                 - Split out the alpha, beta, gamma methods into a seperate class
+
     """
     def __init__(self,width=0,gap=0,length=0,elen=180,fo=0,er=0,h=None,t=0,pen_depth=None):
         """ Constructor method. 
@@ -91,13 +87,12 @@ class CPW:
         'Ll':self.geometric_inductance_per_length(),
         'Cl':self.capacitance_per_length(),
         'Z':self.impedance_geometric(),
-        'Zki':self.impedance_kinetic(),
+        'Zki':self.impedance_total(),
         }
 
         return pd.DataFrame(data=[dic])
 
     ######## WAVE PROPERTIES
-
     def resonant_freq(self):
         num_len = 360 / self.__elen
         Ll = self.total_inductance_per_length()
@@ -131,14 +126,12 @@ class CPW:
         Cl = self.capacitance_per_length()
         return self.__fo * np.sqrt(Ll*Cl)
 
-
-    ######## ELECTRICAL PROPERTIES
-
     def Lk(self):
         Lk = (spc.mu_0 * ((self.__pen_depth**2)
                 /(self.__t*self.__w)) * self.__cm.g())
         return Lk
     
+    ######## ELECTRICAL PROPERTIES
     def total_inductance_per_length(self):
         return self.Lk() + self.geometric_inductance_per_length()
         
@@ -154,23 +147,6 @@ class CPW:
         Kk,Kkp = self.__cm.elliptic_integral()
         return ( ( 30 * np.pi ) / np.sqrt(self.__eeff) ) * (Kkp / Kk)
 
-    def impedance_kinetic(self):
+    def impedance_total(self):
         return np.sqrt(self.total_inductance_per_length() / self.capacitance_per_length())
 
-
-    ######## GEOMETRY PROPERTIES
-
-    def alpha(self,tan_d=0.005):
-        eeff = self.effective_permittivity()
-        ad = (self.__er/np.sqrt(eeff)) * ((eeff-1)/(self.__er-1)) * (np.pi/self.wavelength()) * tan_d
-        return ad
-
-    def beta(self,freq):
-        Ll = self.total_inductance_per_length()
-        Cl = self.capacitance_per_length()
-        return 2*np.pi*freq*np.sqrt(Ll*Cl)
-
-    def gamma(self,freq,tan_d=0.005):
-        alpha = self.alpha(tan_d)
-        beta = self.beta(freq)
-        return alpha + 1j*beta
