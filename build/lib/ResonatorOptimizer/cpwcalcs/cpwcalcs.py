@@ -55,6 +55,8 @@ class cpwCalcs:
             self.__eeff = self.effective_permittivity()
 
         print('CPW with electrical length = ' + str(elen) + ' degrees')
+
+    ######## PRINTING
     
     def print_cpw_params(self):
         """ cpw_params returns the geometric parameters of the cpw structure.
@@ -90,6 +92,8 @@ class cpwCalcs:
         }
 
         return pd.DataFrame(data=[dic])
+
+    ######## CONFORMAL MAPPING
 
     def elliptic_integral(self,h=None):
         """elliptic_integral calculates the complete elliptic integral of the first kind
@@ -134,6 +138,9 @@ class cpwCalcs:
         g = outer * inner
         return g
 
+
+    ######## WAVE PROPERTIES
+
     def resonant_freq(self):
         num_len = 360 / self.__elen
         Ll = self.total_inductance_per_length()
@@ -168,8 +175,7 @@ class cpwCalcs:
         return self.__fo * np.sqrt(Ll*Cl)
 
 
-
-
+    ######## ELECTRICAL PROPERTIES
 
     def Lk(self):
         Lk = (spc.mu_0 * ((self.__pen_depth**2)
@@ -195,8 +201,7 @@ class cpwCalcs:
         return np.sqrt(self.total_inductance_per_length() / self.capacitance_per_length())
 
 
-
-
+    ######## GEOMETRY PROPERTIES
 
     def alpha(self,tan_d=0.005):
         eeff = self.effective_permittivity()
@@ -212,60 +217,3 @@ class cpwCalcs:
         alpha = self.alpha(tan_d)
         beta = self.beta(freq)
         return alpha + 1j*beta
-    
-# class ParamSweeps(CPWCalcs):
-#     def __init__(self,length,total_width,fo,er,h,t,pen_depth):
-#         self.__length = length
-#         self.__total_width = total_width
-#         self.__fo = fo
-#         self.__er = er
-#         self.__h = h
-#         self.__t = t
-#         self.__pen_depth = pen_depth
-#         return
-    
-#     def width_to_gap(minw,maxw,wit=0.2):
-#     Zcpw = []
-#     Zki = []
-#     wcpw = []
-#     scpw = []
-
-#     Cl = []
-#     Ll = []
-#     Lkl = []
-#     Ltot = []
-    
-#     vp = []
-    
-#     wlist = list(np.arange(minw,maxw,wit))
-
-#     for w in range(1,len(wlist)):
-#         width = wlist[w]
-#         wcpw.append(width*1e-06)
-#         scpw.append(.5*(self.__total_width - wcpw[w-1]))
-#         cpw = super.CPWCalcs(wcpw[w-1],scpw[w-1],length,fo,er,h=h,t=t,pen_depth=pen_depth)
-#         Zcpw.append(cpw.impedance())
-#         Zki.append(np.sqrt(cpw.total_inductance_per_length() / cpw.capacitance_per_length()))
-
-#         Cl.append(cpw.capacitance_per_length())
-#         Ll.append(cpw.geometric_inductance_per_length())
-#         Lkl.append(cpw.Lk())
-#         Ltot.append(cpw.total_inductance_per_length())  
-#         vp.append(cpw.phase_velocity())
-        
-#     res_freq = 1 / (2*self.__length*np.sqrt(np.array(Ltot)*np.array(Cl)))
-        
-#     data = {'width':wcpw,
-#             'gap':scpw,
-#             'Z':Zcpw,
-#             'Zki':Zki,
-#             'Cl':Cl,
-#             'Ll':Ll,
-#             'Lkl':Lkl,
-#             'Ltot':Ltot,
-#             'vp':vp,
-#             'res_freq':res_freq
-#            }
-    
-#     parameters = pd.DataFrame(data=data)
-#     return parameters

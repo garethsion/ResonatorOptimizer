@@ -9,6 +9,8 @@ ResonatorOptimizer.egg-info/top_level.txt
 ResonatorOptimizer/bragg/__init__.py
 ResonatorOptimizer/bragg/bragg.py
 ResonatorOptimizer/cpwcalcs/__init__.py
+ResonatorOptimizer/cpwcalcs/conformalmapping.py
+ResonatorOptimizer/cpwcalcs/cpw.py
 ResonatorOptimizer/cpwcalcs/cpwcalcs.py
 ResonatorOptimizer/cpwcalcs/paramsweeps.py
 ResonatorOptimizer/cpwcalcs/resonatorfitting.py

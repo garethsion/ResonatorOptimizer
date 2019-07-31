@@ -2,8 +2,9 @@ import numpy as np
 import pandas as pd
 import scipy.constants as spc 
 from scipy.special import ellipk
+from ResonatorOptimizer.cpwcalcs import conformalmapping as cm
 
-class cpwCalcs:
+class CPW:
     """ cpwCalcs contains the methods necessary for calculating certain parameters of 
     interest of a superconducting cpw structure. Solutions for the resonant frequency, 
     characteristic impedance, phase constant, etc, are determined by solving the
@@ -48,16 +49,18 @@ class cpwCalcs:
         self.__h = h
         self.__t = t
         self.__pen_depth=pen_depth
+
+        self.__cm = cm.ConformalMapping(width=self.__w,
+                gap=self.__s,er=self.__er,h=self.__h,t=self.__t)
         
         if not self.__h:
             self.__eeff = (er + 1) /2
         elif self.__h:
-            self.__eeff = self.effective_permittivity()
+            self.__eeff = self.__cm.effective_permittivity()
 
         print('CPW with electrical length = ' + str(elen) + ' degrees')
 
     ######## PRINTING
-    
     def print_cpw_params(self):
         """ cpw_params returns the geometric parameters of the cpw structure.
 
@@ -92,52 +95,6 @@ class cpwCalcs:
         }
 
         return pd.DataFrame(data=[dic])
-
-    ######## CONFORMAL MAPPING
-
-    def elliptic_integral(self,h=None):
-        """elliptic_integral calculates the complete elliptic integral of the first kind
-        for a given cpw geometry as part of a conformal mapping strategy.
-
-        params  : h     : substrate thickness (opt)
-
-        returns : (Kk, Kkp)     : tuple 
-        """
-        if not self.__h:
-            k = self.__w / (self.__w + 2*self.__s)
-            kp = np.sqrt(1-k**2)
-        elif self.__h:            
-            k = ( np.sinh((np.pi*self.__w)/(4*self.__h)) 
-                 / np.sinh( (np.pi*(self.__w+2*self.__s)) 
-                           / (4*self.__h) ) )
-            kp = np.sqrt(1-k**2)
-        Kk = ellipk(k)
-        Kkp = ellipk(kp)
-        return (Kk,Kkp)
-
-    def effective_permittivity(self):
-        Kk1,Kkp1 = self.elliptic_integral()
-        Kk2,Kkp2 = self.elliptic_integral(h=self.__h)
-        
-        eeff = 1 + .5*(self.__er-1) * Kk2/Kkp2 * Kkp1/Kk1
-        return eeff
-        
-    def g(self):
-        w = self.__w
-        s = self.__s
-        t = self.__t
-        
-        k = (w) / (w+(2*s))
-        Kk,Kkp = self.elliptic_integral()
-        
-        outer = 1 / (2*(k**2)*(Kk**2))
-        inner1 = -np.log(t / (4*w)) 
-        inner2 = - (w/(w+(2*s))) * np.log(t / (4*(w+2*s)) )
-        inner3 = (2*(w+s)/(w+(2*s))) * np.log(s / (w+s))
-        inner = inner1 + inner2 + inner3
-        g = outer * inner
-        return g
-
 
     ######## WAVE PROPERTIES
 
@@ -179,22 +136,22 @@ class cpwCalcs:
 
     def Lk(self):
         Lk = (spc.mu_0 * ((self.__pen_depth**2)
-                /(self.__t*self.__w)) * self.g())
+                /(self.__t*self.__w)) * self.__cm.g())
         return Lk
     
     def total_inductance_per_length(self):
         return self.Lk() + self.geometric_inductance_per_length()
         
     def geometric_inductance_per_length(self):
-        Kk,Kkp = self.elliptic_integral()
+        Kk,Kkp = self.__cm.elliptic_integral()
         return (spc.mu_0/4) * Kkp / Kk
 
     def capacitance_per_length(self):
-        Kk,Kkp = self.elliptic_integral()
-        return 4*spc.epsilon_0*self.__eeff*(Kk / Kkp)
+        Kk,Kkp = self.__cm.elliptic_integral()
+        return 4*spc.epsilon_0*(self.__eeff*(Kk / Kkp))
 
     def impedance_geometric(self):
-        Kk,Kkp = self.elliptic_integral()
+        Kk,Kkp = self.__cm.elliptic_integral()
         return ( ( 30 * np.pi ) / np.sqrt(self.__eeff) ) * (Kkp / Kk)
 
     def impedance_kinetic(self):
