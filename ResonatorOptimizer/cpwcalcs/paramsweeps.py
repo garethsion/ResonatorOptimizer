@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from ResonatorOptimizer.cpwcalcs import cpwcalcs 
+from ResonatorOptimizer.cpwcalcs import cpw 
     
 class ParamSweeps():
     def __init__(self,length,total_width,fo,er,h,t,pen_depth):
@@ -33,15 +33,16 @@ class ParamSweeps():
             width = wlist[w]
             wcpw.append(width*1e-06)
             scpw.append(.5*(self.__total_width - wcpw[w-1]))
-            cpw = cpwcalcs.cpwCalcs(wcpw[w-1],scpw[w-1],self.__length,self.__fo,self.__er,h=self.__h,t=self.__t,pen_depth=self.__pen_depth)
-            Zcpw.append(cpw.impedance())
-            Zki.append(np.sqrt(cpw.Ltotal() / cpw.capacitance_per_length()))
+            cp = cpw.CPW(width=wcpw[w-1],gap=scpw[w-1],length=self.__length,
+                fo=self.__fo,er=self.__er,h=self.__h,t=self.__t,pen_depth=self.__pen_depth)
+            Zcpw.append(cp.impedance_geometric())
+            Zki.append(cp.impedance_total())
 
-            Cl.append(cpw.capacitance_per_length())
-            Ll.append(cpw.inductance_per_length())
-            Lkl.append(cpw.Lk())
-            Ltot.append(cpw.Ltotal())  
-            vp.append(cpw.phase_velocity())
+            Cl.append(cp.capacitance_per_length())
+            Ll.append(cp.geometric_inductance_per_length())
+            Lkl.append(cp.kinetic_inductance_per_length())
+            Ltot.append(cp.total_inductance_per_length())  
+            vp.append(cp.phase_velocity())
             
         res_freq = 1 / (2*self.__length*np.sqrt(np.array(Ltot)*np.array(Cl)))
             

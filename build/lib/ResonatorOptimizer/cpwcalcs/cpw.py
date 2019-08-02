@@ -54,7 +54,7 @@ class CPW:
         elif self.__h:
             self.__eeff = self.__cm.effective_permittivity()
 
-        print('CPW with electrical length = ' + str(elen) + ' degrees')
+        # print('CPW with electrical length = ' + str(elen) + ' degrees')
 
     ######## PRINTING
     def print_cpw_params(self):
@@ -82,7 +82,7 @@ class CPW:
 
     def print_electrical_params(self):
         dic = {
-        'Lk':self.Lk(),
+        'kinetic_inductance_per_length':self.kinetic_inductance_per_length(),
         'Ltotal':self.total_inductance_per_length(),
         'Ll':self.geometric_inductance_per_length(),
         'Cl':self.capacitance_per_length(),
@@ -126,14 +126,14 @@ class CPW:
         Cl = self.capacitance_per_length()
         return self.__fo * np.sqrt(Ll*Cl)
 
-    def Lk(self):
-        Lk = (spc.mu_0 * ((self.__pen_depth**2)
+    def kinetic_inductance_per_length(self):
+        kinetic_inductance_per_length = (spc.mu_0 * ((self.__pen_depth**2)
                 /(self.__t*self.__w)) * self.__cm.g())
-        return Lk
+        return kinetic_inductance_per_length
     
     ######## ELECTRICAL PROPERTIES
     def total_inductance_per_length(self):
-        return self.Lk() + self.geometric_inductance_per_length()
+        return self.kinetic_inductance_per_length() + self.geometric_inductance_per_length()
         
     def geometric_inductance_per_length(self):
         Kk,Kkp = self.__cm.elliptic_integral()

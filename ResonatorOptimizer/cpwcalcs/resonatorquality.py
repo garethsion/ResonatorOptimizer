@@ -31,3 +31,14 @@ class ResonatorQuality:
             return g/(g+1)
         else:
             raise ValueError('The format specified is not recognized. Please choose either \'db\' or \'mag\'')
+
+    def print_quality_params(self):
+        """ cpw_params returns the geometric parameters of the cpw structure.
+
+        returns     : pandas dataframe
+        """
+        dic = {'Qint':self.Qint(), 'Qext':self.Qext(), 'Qloaded':self.Qloaded()}
+
+        df = pd.DataFrame(data=[dic])
+
+        return df

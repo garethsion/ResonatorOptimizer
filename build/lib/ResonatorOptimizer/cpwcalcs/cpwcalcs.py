@@ -54,7 +54,7 @@ class cpwCalcs:
         elif self.__h:
             self.__eeff = self.effective_permittivity()
 
-        print('CPW with electrical length = ' + str(elen) + ' degrees')
+        # print('CPW with electrical length = ' + str(elen) + ' degrees')
 
     ######## PRINTING
     
