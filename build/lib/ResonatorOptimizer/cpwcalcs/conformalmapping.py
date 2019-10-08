@@ -1,18 +1,40 @@
+#!/usr/bin/env
+
+"""
+    ConformalMapping contains the methods for calculating the Schwartz-Christofell 
+    mapping functions for a CPW geometry. 
+"""
+
 import numpy as np
 import pandas as pd
 import scipy.constants as spc 
 from scipy.special import ellipk
 
 class ConformalMapping:
+    """
+        ConformalMapping contains the methods for calculating the Schwartz-Christofell 
+        mapping functions for a CPW geometry. 
+    """
     def __init__(self,width=0,gap=0,er=0,h=None,t=0):
-        """ Constructor method. 
-
-        params: width       : conductor width
-                gap         : gap between conductor and ground plane
-                er          : relative permittivity of substrate
-                h           : thiockness of substrate
-                t           : thickness of conductor thin film
         """
+        Constructor method - Initializes the cpw geometry
+
+        :type width: float
+        :param width: conductor width
+
+        :type gap: float
+        :param gap: gap between conductor and ground plane
+
+        :type er: float
+        :param er: relative permittivity of substrate
+
+        :type h: float
+        :param h: thickness of substrate
+
+        :type t: float
+        :param t: thickness of conductor thin film
+        """
+
         self.__w = width
         self.__s = gap
         self.__er = er
@@ -26,12 +48,12 @@ class ConformalMapping:
 
 
     def elliptic_integral(self,h=None):
-        """elliptic_integral calculates the complete elliptic integral of the first kind
+        """
+        calculates the complete elliptic integral of the first kind
         for a given cpw geometry as part of a conformal mapping strategy.
 
-        params  : h     : substrate thickness (opt)
-
-        returns : (Kk, Kkp)     : tuple 
+        :type h: float
+        :params h: substrate thickness (opt)
         """
         if not self.__h:
             k = self.__w / (self.__w + 2*self.__s)
@@ -46,6 +68,10 @@ class ConformalMapping:
         return (Kk,Kkp)
 
     def effective_permittivity(self):
+        """
+        calculates the effective permittivity by performing complete 
+        elliptic integral of the first kind 
+        """
         Kk1,Kkp1 = self.elliptic_integral()
         Kk2,Kkp2 = self.elliptic_integral(h=self.__h)
         
@@ -53,6 +79,10 @@ class ConformalMapping:
         return eeff
         
     def g(self):
+        """
+        calculates the geometric factor necessary for calculating the
+        kinetic inductance of a CPW
+        """
         w = self.__w
         s = self.__s
         t = self.__t

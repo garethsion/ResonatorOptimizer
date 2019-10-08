@@ -1,4 +1,4 @@
-from .cpwcalcs import cpwCalcs
+#from .cpwcalcs import cpwcalcs
 from .cpw import CPW
 from .conformalmapping import ConformalMapping
 from .tlparameters import TLParameters

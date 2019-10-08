@@ -23,6 +23,11 @@ class Sparams:
     def transfer(self,inport,transmission,outport):
         return inport * transmission * outport
 
+    def s11_from_abcd(self,abcd,Rload=50,format='db'):
+        s11_mat = [self.get_s11(abcd[i],Rload,format) for i in range(len(self.__freq))]
+        s11 = np.array([complex(s11_mat[i]) for i in range(len(s11_mat))])
+        return s11
+
     def s21_from_abcd(self,abcd,Rload=50,format='db'):
         s21_mat = [self.get_s21(abcd[i],Rload,format) for i in range(len(self.__freq))]
         s21 = np.array([complex(s21_mat[i]) for i in range(len(s21_mat))])
@@ -36,6 +41,22 @@ class Sparams:
         s21_mat = [self.get_s21(abcd_mat[i],Rload,format) for i in range(len(self.__freq))]
         s21 = np.array([complex(s21_mat[i]) for i in range(len(s21_mat))])
         return s21
+
+    def get_s11(self,abcd,Rload,format):
+        A = abcd.flat[0]
+        B = abcd.flat[1]
+        C = abcd.flat[2]
+        D = abcd.flat[3]
+
+        s11 = (A + (B/Rload) - C*Rload - D) / (A + (B/Rload) + C*Rload + D)
+
+        if format == 'db':
+            return 20*np.log10(s11)
+        elif format == 'mag':
+            return s11
+        else:
+            raise ValueError('The format specified is not recognized. Please choose either \'db\' or \'mag\'')
+
 
     def get_s21(self,abcd,Rload,format):
         A = abcd.flat[0]

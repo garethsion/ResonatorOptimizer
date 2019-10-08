@@ -1,0 +1,703 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cpwcalcs &#8212; ResonatorOptimizer 16/09/2019 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to CPWBragg’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cpwcalcs">
+<h1>cpwcalcs<a class="headerlink" href="#cpwcalcs" title="Permalink to this headline">¶</a></h1>
+<p>This package contains the methods for performing Shwartz-Christofell mapping
+functions, necessary for determining the transmission line properties of a
+CPW resonator</p>
+<div class="section" id="module-ResonatorOptimizer.cpwcalcs.conformalmapping">
+<span id="conformalmapping"></span><h2>conformalmapping<a class="headerlink" href="#module-ResonatorOptimizer.cpwcalcs.conformalmapping" title="Permalink to this headline">¶</a></h2>
+<p>ConformalMapping contains the methods for calculating the Schwartz-Christofell 
+mapping functions for a CPW geometry.</p>
+<dl class="class">
+<dt id="ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping">
+<em class="property">class </em><code class="descclassname">ResonatorOptimizer.cpwcalcs.conformalmapping.</code><code class="descname">ConformalMapping</code><span class="sig-paren">(</span><em>width=0</em>, <em>gap=0</em>, <em>er=0</em>, <em>h=None</em>, <em>t=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/conformalmapping.html#ConformalMapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>ConformalMapping contains the methods for calculating the Schwartz-Christofell 
+mapping functions for a CPW geometry.</p>
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping.effective_permittivity">
+<code class="descname">effective_permittivity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/conformalmapping.html#ConformalMapping.effective_permittivity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping.effective_permittivity" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the effective permittivity by performing complete 
+elliptic integral of the first kind</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping.elliptic_integral">
+<code class="descname">elliptic_integral</code><span class="sig-paren">(</span><em>h=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/conformalmapping.html#ConformalMapping.elliptic_integral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping.elliptic_integral" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the complete elliptic integral of the first kind
+for a given cpw geometry as part of a conformal mapping strategy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Params h:</th><td class="field-body">substrate thickness (opt)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping.g">
+<code class="descname">g</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/conformalmapping.html#ConformalMapping.g"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.conformalmapping.ConformalMapping.g" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the geometric factor necessary for calculating the
+kinetic inductance of a CPW</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ConformalMapping contains the methods for calculating the Schwartz-Christofell</span>
+<span class="sd">    mapping functions for a CPW geometry.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">spc</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">ellipk</span>
+
+<span class="k">class</span> <span class="nc">ConformalMapping</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ConformalMapping contains the methods for calculating the Schwartz-Christofell</span>
+<span class="sd">        mapping functions for a CPW geometry.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">gap</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">er</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor method - Initializes the cpw geometry</span>
+
+<span class="sd">        :type width: float</span>
+<span class="sd">        :param width: conductor width</span>
+
+<span class="sd">        :type gap: float</span>
+<span class="sd">        :param gap: gap between conductor and ground plane</span>
+
+<span class="sd">        :type er: float</span>
+<span class="sd">        :param er: relative permittivity of substrate</span>
+
+<span class="sd">        :type h: float</span>
+<span class="sd">        :param h: thickness of substrate</span>
+
+<span class="sd">        :type t: float</span>
+<span class="sd">        :param t: thickness of conductor thin film</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__w</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__s</span> <span class="o">=</span> <span class="n">gap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__er</span> <span class="o">=</span> <span class="n">er</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__h</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__t</span> <span class="o">=</span> <span class="n">t</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span> <span class="o">=</span> <span class="p">(</span><span class="n">er</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span><span class="mi">2</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">effective_permittivity</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">elliptic_integral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calculates the complete elliptic integral of the first kind</span>
+<span class="sd">        for a given cpw geometry as part of a conformal mapping strategy.</span>
+
+<span class="sd">        :type h: float</span>
+<span class="sd">        :params h: substrate thickness (opt)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__w</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__w</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__s</span><span class="p">)</span>
+            <span class="n">kp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">k</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">sinh</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__w</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">))</span>
+                 <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__w</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__s</span><span class="p">))</span>
+                           <span class="o">/</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+            <span class="n">kp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">k</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">Kk</span> <span class="o">=</span> <span class="n">ellipk</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">Kkp</span> <span class="o">=</span> <span class="n">ellipk</span><span class="p">(</span><span class="n">kp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Kk</span><span class="p">,</span><span class="n">Kkp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">effective_permittivity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calculates the effective permittivity by performing complete</span>
+<span class="sd">        elliptic integral of the first kind</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Kk1</span><span class="p">,</span><span class="n">Kkp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elliptic_integral</span><span class="p">()</span>
+        <span class="n">Kk2</span><span class="p">,</span><span class="n">Kkp2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elliptic_integral</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">)</span>
+
+        <span class="n">eeff</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__er</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Kk2</span><span class="o">/</span><span class="n">Kkp2</span> <span class="o">*</span> <span class="n">Kkp1</span><span class="o">/</span><span class="n">Kk1</span>
+        <span class="k">return</span> <span class="n">eeff</span>
+
+    <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calculates the geometric factor necessary for calculating the</span>
+<span class="sd">        kinetic inductance of a CPW</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__w</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__s</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__t</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="p">))</span>
+        <span class="n">Kk</span><span class="p">,</span><span class="n">Kkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elliptic_integral</span><span class="p">()</span>
+
+        <span class="n">outer</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Kk</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">inner1</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">w</span><span class="p">))</span>
+        <span class="n">inner2</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="p">))</span> <span class="p">)</span>
+        <span class="n">inner3</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="n">s</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">s</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s</span> <span class="o">/</span> <span class="p">(</span><span class="n">w</span><span class="o">+</span><span class="n">s</span><span class="p">))</span>
+        <span class="n">inner</span> <span class="o">=</span> <span class="n">inner1</span> <span class="o">+</span> <span class="n">inner2</span> <span class="o">+</span> <span class="n">inner3</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">outer</span> <span class="o">*</span> <span class="n">inner</span>
+        <span class="k">return</span> <span class="n">g</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-ResonatorOptimizer.cpwcalcs.cpw">
+<span id="cpw"></span><h2>cpw<a class="headerlink" href="#module-ResonatorOptimizer.cpwcalcs.cpw" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW">
+<em class="property">class </em><code class="descclassname">ResonatorOptimizer.cpwcalcs.cpw.</code><code class="descname">CPW</code><span class="sig-paren">(</span><em>width=0</em>, <em>gap=0</em>, <em>length=0</em>, <em>elen=180</em>, <em>fo=0</em>, <em>er=0</em>, <em>h=None</em>, <em>t=0</em>, <em>pen_depth=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW" title="Permalink to this definition">¶</a></dt>
+<dd><p>cpw contains the methods necessary for calculating certain parameters of 
+interest of a superconducting cpw structure. Solutions for the resonant frequency, 
+characteristic impedance, phase constant, etc, are determined by solving the
+cpw geometry analytically through conformal mapping.</p>
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.capacitance_per_length">
+<code class="descname">capacitance_per_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.capacitance_per_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.capacitance_per_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the capacitance per unit length</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.geometric_inductance_per_length">
+<code class="descname">geometric_inductance_per_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.geometric_inductance_per_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.geometric_inductance_per_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the geometric inductance per unit length</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.impedance_geometric">
+<code class="descname">impedance_geometric</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.impedance_geometric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.impedance_geometric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the impedance, only considering the geometric contribution 
+of the inductance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.impedance_total">
+<code class="descname">impedance_total</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.impedance_total"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.impedance_total" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the impedance considering the total inductance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.kinetic_inductance_per_length">
+<code class="descname">kinetic_inductance_per_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.kinetic_inductance_per_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.kinetic_inductance_per_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the kinetic inductance per unit length</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.phase_constant">
+<code class="descname">phase_constant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.phase_constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.phase_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the phase constant</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.phase_velocity">
+<code class="descname">phase_velocity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.phase_velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.phase_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the phase velocity</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.print_cpw_params">
+<code class="descname">print_cpw_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.print_cpw_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.print_cpw_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the geometric parameters of the cpw structure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.print_electrical_params">
+<code class="descname">print_electrical_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.print_electrical_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.print_electrical_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints out the transmission electrical parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.print_wave_params">
+<code class="descname">print_wave_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.print_wave_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.print_wave_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints out the transmission wave parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.resonant_freq">
+<code class="descname">resonant_freq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.resonant_freq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.resonant_freq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the resonant frequency of the CPW</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.total_inductance_per_length">
+<code class="descname">total_inductance_per_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.total_inductance_per_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.total_inductance_per_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total inductance per unity length (Lk + Lg)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.cpw.CPW.wavelength">
+<code class="descname">wavelength</code><span class="sig-paren">(</span><em>medium='cpw'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/cpw.html#CPW.wavelength"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.cpw.CPW.wavelength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the wavelength of the cpw 
+:type medium: str
+:param medium: material for calculating phase velocity (e.g. freespace, cpw)</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">spc</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">ellipk</span>
+<span class="kn">from</span> <span class="nn">ResonatorOptimizer.cpwcalcs</span> <span class="k">import</span> <span class="n">conformalmapping</span> <span class="k">as</span> <span class="n">cm</span>
+
+<span class="k">class</span> <span class="nc">CPW</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; cpw contains the methods necessary for calculating certain parameters of</span>
+<span class="sd">    interest of a superconducting cpw structure. Solutions for the resonant frequency,</span>
+<span class="sd">    characteristic impedance, phase constant, etc, are determined by solving the</span>
+<span class="sd">    cpw geometry analytically through conformal mapping.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">gap</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">elen</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span><span class="n">fo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">er</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pen_depth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor method - Initializes the cpw geometry</span>
+
+<span class="sd">        :type width: float</span>
+<span class="sd">        :param width: conductor width</span>
+
+<span class="sd">        :type gap: float</span>
+<span class="sd">        :param gap: gap between conductor and ground plane</span>
+
+<span class="sd">        :type length: float</span>
+<span class="sd">        :param length: conductor length</span>
+
+<span class="sd">        :type elen: float</span>
+<span class="sd">        :param elen: conductor electrical length (degrees)</span>
+
+<span class="sd">        :type fo: float</span>
+<span class="sd">        :param fo: designed resonant frequency</span>
+
+<span class="sd">        :type er: float</span>
+<span class="sd">        :param er: relative permittivity of substrate</span>
+
+<span class="sd">        :type h: float</span>
+<span class="sd">        :param h: thickness of substrate</span>
+
+<span class="sd">        :type t: float</span>
+<span class="sd">        :param t: thickness of conductor thin film</span>
+
+<span class="sd">        :type pen_depth: float</span>
+<span class="sd">        :param pen_depth: magnetic penetration depth</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__w</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__s</span> <span class="o">=</span> <span class="n">gap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__l</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__elen</span> <span class="o">=</span> <span class="n">elen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fo</span> <span class="o">=</span> <span class="n">fo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__er</span> <span class="o">=</span> <span class="n">er</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__h</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__t</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pen_depth</span><span class="o">=</span><span class="n">pen_depth</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cm</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">ConformalMapping</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__w</span><span class="p">,</span>
+                <span class="n">gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__s</span><span class="p">,</span><span class="n">er</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__er</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__t</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span> <span class="o">=</span> <span class="p">(</span><span class="n">er</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span><span class="mi">2</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cm</span><span class="o">.</span><span class="n">effective_permittivity</span><span class="p">()</span>
+
+        <span class="c1"># print(&#39;CPW with electrical length = &#39; + str(elen) + &#39; degrees&#39;)</span>
+
+    <span class="c1">######## PRINTING</span>
+    <span class="k">def</span> <span class="nf">print_cpw_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; returns the geometric parameters of the cpw structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__w</span><span class="p">,</span> <span class="s1">&#39;gap&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__s</span><span class="p">,</span> <span class="s1">&#39;length&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__l</span><span class="p">,</span>
+        <span class="s1">&#39;h&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__t</span><span class="p">,</span> <span class="s1">&#39;er&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__er</span><span class="p">,</span> <span class="s1">&#39;eeff&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span><span class="p">,</span>
+        <span class="s1">&#39;pen_depth&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">__pen_depth</span><span class="p">}</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">dic</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">print_wave_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; prints out the transmission wave parameters &quot;&quot;&quot;</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;fo&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">resonant_freq</span><span class="p">(),</span>
+        <span class="s1">&#39;wavelength&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">(),</span>
+        <span class="s1">&#39;vp&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_velocity</span><span class="p">(),</span>
+        <span class="s1">&#39;phase_const&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_constant</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">dic</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">print_electrical_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; prints out the transmission electrical parameters &quot;&quot;&quot;</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;kinetic_inductance_per_length&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">kinetic_inductance_per_length</span><span class="p">(),</span>
+        <span class="s1">&#39;Ltotal&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">total_inductance_per_length</span><span class="p">(),</span>
+        <span class="s1">&#39;Ll&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">geometric_inductance_per_length</span><span class="p">(),</span>
+        <span class="s1">&#39;Cl&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">capacitance_per_length</span><span class="p">(),</span>
+        <span class="s1">&#39;Z&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">impedance_geometric</span><span class="p">(),</span>
+        <span class="s1">&#39;Zki&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">impedance_total</span><span class="p">(),</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">dic</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">resonant_freq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the resonant frequency of the CPW &quot;&quot;&quot;</span>
+        <span class="n">num_len</span> <span class="o">=</span> <span class="mi">360</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elen</span>
+        <span class="n">Ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_inductance_per_length</span><span class="p">()</span>
+        <span class="n">Cl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacitance_per_length</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_len</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__l</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Ll</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Cl</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">medium</span><span class="o">=</span><span class="s1">&#39;cpw&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the wavelength of the cpw</span>
+<span class="sd">            :type medium: str</span>
+<span class="sd">            :param medium: material for calculating phase velocity (e.g. freespace, cpw)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">medium</span> <span class="o">==</span> <span class="s1">&#39;freespace&#39;</span><span class="p">:</span>
+            <span class="n">vp</span> <span class="o">=</span> <span class="n">spc</span><span class="o">.</span><span class="n">c</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__er</span><span class="p">)</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">vp</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">resonant_freq</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">medium</span> <span class="o">==</span> <span class="s1">&#39;effective&#39;</span><span class="p">:</span>
+            <span class="n">vp</span> <span class="o">=</span> <span class="n">spc</span><span class="o">.</span><span class="n">c</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span><span class="p">)</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">vp</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">resonant_freq</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">medium</span> <span class="o">==</span> <span class="s1">&#39;cpw&#39;</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_velocity</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">resonant_freq</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">l</span>
+
+    <span class="k">def</span> <span class="nf">phase_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the phase velocity &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometric_inductance_per_length</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_inductance_per_length</span><span class="p">()</span>
+        <span class="n">Cl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacitance_per_length</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Ll</span><span class="o">*</span><span class="n">Cl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">phase_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the phase constant &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometric_inductance_per_length</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">__t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_inductance_per_length</span><span class="p">()</span>
+        <span class="n">Cl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacitance_per_length</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fo</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Ll</span><span class="o">*</span><span class="n">Cl</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">kinetic_inductance_per_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the kinetic inductance per unit length &quot;&quot;&quot;</span>
+        <span class="n">kinetic_inductance_per_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">spc</span><span class="o">.</span><span class="n">mu_0</span> <span class="o">*</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">__pen_depth</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__t</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__w</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cm</span><span class="o">.</span><span class="n">g</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">kinetic_inductance_per_length</span>
+
+    <span class="k">def</span> <span class="nf">total_inductance_per_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the total inductance per unity length (Lk + Lg) &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">kinetic_inductance_per_length</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometric_inductance_per_length</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">geometric_inductance_per_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the geometric inductance per unit length &quot;&quot;&quot;</span>
+        <span class="n">Kk</span><span class="p">,</span><span class="n">Kkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cm</span><span class="o">.</span><span class="n">elliptic_integral</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">spc</span><span class="o">.</span><span class="n">mu_0</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="n">Kkp</span> <span class="o">/</span> <span class="n">Kk</span>
+
+    <span class="k">def</span> <span class="nf">capacitance_per_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the capacitance per unit length &quot;&quot;&quot;</span>
+        <span class="n">Kk</span><span class="p">,</span><span class="n">Kkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cm</span><span class="o">.</span><span class="n">elliptic_integral</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mi">4</span><span class="o">*</span><span class="n">spc</span><span class="o">.</span><span class="n">epsilon_0</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span><span class="o">*</span><span class="p">(</span><span class="n">Kk</span> <span class="o">/</span> <span class="n">Kkp</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">impedance_geometric</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the impedance, only considering the geometric contribution</span>
+<span class="sd">        of the inductance &quot;&quot;&quot;</span>
+        <span class="n">Kk</span><span class="p">,</span><span class="n">Kkp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cm</span><span class="o">.</span><span class="n">elliptic_integral</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="p">(</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__eeff</span><span class="p">)</span> <span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Kkp</span> <span class="o">/</span> <span class="n">Kk</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">impedance_total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the impedance considering the total inductance &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_inductance_per_length</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacitance_per_length</span><span class="p">())</span>
+</pre></div>
+</div>
+<span class="target" id="module-ResonatorOptimizer.cpwcalcs.paramsweeps"></span><dl class="class">
+<dt id="ResonatorOptimizer.cpwcalcs.paramsweeps.ParamSweeps">
+<em class="property">class </em><code class="descclassname">ResonatorOptimizer.cpwcalcs.paramsweeps.</code><code class="descname">ParamSweeps</code><span class="sig-paren">(</span><em>length</em>, <em>total_width</em>, <em>fo</em>, <em>er</em>, <em>h</em>, <em>t</em>, <em>pen_depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/paramsweeps.html#ParamSweeps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.paramsweeps.ParamSweeps" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class for sweeping geometric parameters of a cpw</p>
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.paramsweeps.ParamSweeps.plot_params">
+<code class="descname">plot_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/paramsweeps.html#ParamSweeps.plot_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.paramsweeps.ParamSweeps.plot_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the transmission parameters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>pd dataframe</em>) – transmission parameters</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ResonatorOptimizer.cpwcalcs.paramsweeps.ParamSweeps.width_to_gap">
+<code class="descname">width_to_gap</code><span class="sig-paren">(</span><em>minw</em>, <em>maxw</em>, <em>wit=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ResonatorOptimizer/cpwcalcs/paramsweeps.html#ParamSweeps.width_to_gap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ResonatorOptimizer.cpwcalcs.paramsweeps.ParamSweeps.width_to_gap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the transmission parameters for a given width and gap
+range</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>minw</strong> (<em>float</em>) – min conductor width</li>
+<li><strong>maxw</strong> (<em>float</em>) – max conductor width</li>
+<li><strong>mwit</strong> – iterator</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="paramsweeps">
+<h2>paramsweeps<a class="headerlink" href="#paramsweeps" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">ResonatorOptimizer.cpwcalcs</span> <span class="k">import</span> <span class="n">cpw</span>
+
+<span class="k">class</span> <span class="nc">ParamSweeps</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; A class for sweeping geometric parameters of a cpw</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">total_width</span><span class="p">,</span><span class="n">fo</span><span class="p">,</span><span class="n">er</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">pen_depth</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Constructor method - Initializes the cpw geometry</span>
+
+<span class="sd">            :type length: float</span>
+<span class="sd">            :param length: conductor length</span>
+
+<span class="sd">            :type total_width: float</span>
+<span class="sd">            :param width: conductor = 2*gap width</span>
+
+<span class="sd">            :type fo: float</span>
+<span class="sd">            :param fo: designed resonant frequency</span>
+
+<span class="sd">            :type er: float</span>
+<span class="sd">            :param er: relative permittivity of substrate</span>
+
+<span class="sd">            :type h: float</span>
+<span class="sd">            :param h: thickness of substrate</span>
+
+<span class="sd">            :type t: float</span>
+<span class="sd">            :param t: thickness of conductor thin film</span>
+
+<span class="sd">            :type pen_depth: float</span>
+<span class="sd">            :param pen_depth: magnetic penetration depth</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__total_width</span> <span class="o">=</span> <span class="n">total_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__fo</span> <span class="o">=</span> <span class="n">fo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__er</span> <span class="o">=</span> <span class="n">er</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__h</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__t</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pen_depth</span> <span class="o">=</span> <span class="n">pen_depth</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">width_to_gap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">minw</span><span class="p">,</span><span class="n">maxw</span><span class="p">,</span><span class="n">wit</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculates the transmission parameters for a given width and gap</span>
+<span class="sd">        range</span>
+
+<span class="sd">        :type minw: float</span>
+<span class="sd">        :param minw: min conductor width</span>
+
+<span class="sd">        :type maxw: float</span>
+<span class="sd">        :param maxw: max conductor width</span>
+
+<span class="sd">        :type wit: float</span>
+<span class="sd">        :param mwit: iterator</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Zcpw</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Zki</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">wcpw</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">scpw</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">Cl</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Ll</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Lkl</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Ltot</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">vp</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">wlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">minw</span><span class="p">,</span><span class="n">maxw</span><span class="p">,</span><span class="n">wit</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">wlist</span><span class="p">)):</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">wlist</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
+            <span class="n">wcpw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">width</span><span class="o">*</span><span class="mf">1e-06</span><span class="p">)</span>
+            <span class="n">scpw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">.</span><span class="mi">5</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__total_width</span> <span class="o">-</span> <span class="n">wcpw</span><span class="p">[</span><span class="n">w</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">cp</span> <span class="o">=</span> <span class="n">cpw</span><span class="o">.</span><span class="n">CPW</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">wcpw</span><span class="p">[</span><span class="n">w</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">gap</span><span class="o">=</span><span class="n">scpw</span><span class="p">[</span><span class="n">w</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__length</span><span class="p">,</span>
+                <span class="n">fo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__fo</span><span class="p">,</span><span class="n">er</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__er</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__h</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__t</span><span class="p">,</span><span class="n">pen_depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__pen_depth</span><span class="p">)</span>
+            <span class="n">Zcpw</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">impedance_geometric</span><span class="p">())</span>
+            <span class="n">Zki</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">impedance_total</span><span class="p">())</span>
+
+            <span class="n">Cl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">capacitance_per_length</span><span class="p">())</span>
+            <span class="n">Ll</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">geometric_inductance_per_length</span><span class="p">())</span>
+            <span class="n">Lkl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">kinetic_inductance_per_length</span><span class="p">())</span>
+            <span class="n">Ltot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">total_inductance_per_length</span><span class="p">())</span>
+            <span class="n">vp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">phase_velocity</span><span class="p">())</span>
+
+        <span class="n">res_freq</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">__length</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Ltot</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Cl</span><span class="p">)))</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span><span class="n">wcpw</span><span class="p">,</span>
+                <span class="s1">&#39;gap&#39;</span><span class="p">:</span><span class="n">scpw</span><span class="p">,</span>
+                <span class="s1">&#39;Z&#39;</span><span class="p">:</span><span class="n">Zcpw</span><span class="p">,</span>
+                <span class="s1">&#39;Zki&#39;</span><span class="p">:</span><span class="n">Zki</span><span class="p">,</span>
+                <span class="s1">&#39;Cl&#39;</span><span class="p">:</span><span class="n">Cl</span><span class="p">,</span>
+                <span class="s1">&#39;Ll&#39;</span><span class="p">:</span><span class="n">Ll</span><span class="p">,</span>
+                <span class="s1">&#39;Lkl&#39;</span><span class="p">:</span><span class="n">Lkl</span><span class="p">,</span>
+                <span class="s1">&#39;Ltot&#39;</span><span class="p">:</span><span class="n">Ltot</span><span class="p">,</span>
+                <span class="s1">&#39;vp&#39;</span><span class="p">:</span><span class="n">vp</span><span class="p">,</span>
+                <span class="s1">&#39;res_freq&#39;</span><span class="p">:</span><span class="n">res_freq</span>
+               <span class="p">}</span>
+
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parameters</span>
+
+    <span class="k">def</span> <span class="nf">plot_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">params</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Plot the transmission parameters</span>
+
+<span class="sd">        :type params: pd dataframe</span>
+<span class="sd">        :param params: transmission parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Normal&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Zki</span><span class="p">,</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Superconducting&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Zki</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Z ($\Omega$)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Ll</span><span class="o">*</span><span class="mf">1e06</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$L_</span><span class="si">{g}</span><span class="s1">$&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Ll</span><span class="o">*</span><span class="mf">1e06</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">5.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Lkl</span><span class="o">*</span><span class="mf">1e06</span><span class="p">,</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$L_</span><span class="si">{k}</span><span class="s1">$&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Lkl</span><span class="o">*</span><span class="mf">1e06</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">5.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;_nolegend_&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">Ltot</span><span class="o">*</span><span class="mf">1e06</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">5.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">75</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$L = L_</span><span class="si">{g}</span><span class="s1"> + L_</span><span class="si">{k}</span><span class="s1">$&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Inductance ($\mu$ H)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">vp</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">upsilon_</span><span class="si">{p}</span><span class="s1">$ (m/s) &#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">ax4</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">params</span><span class="o">.</span><span class="n">gap</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">res_freq</span><span class="o">*</span><span class="mf">1e-09</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$f_</span><span class="si">{0}</span><span class="s1">$ (GHz) &#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="s1">&#39;w/s&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+        <span class="c1"># # plt.savefig(&#39;Nb_Bragg_Z_Lk_vp_fo.eps&#39;)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># fig.text(0.5, 0.04, &#39;w/s&#39;,fontsize=28, ha=&#39;center&#39;)</span>
+<span class="c1"># # plt.savefig(&#39;Nb_Bragg_Z_Lk_vp_fo.eps&#39;)</span>
+<span class="c1"># plt.show()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ResonatorOptimizer</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">cpwcalcs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-ResonatorOptimizer.cpwcalcs.conformalmapping">conformalmapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ResonatorOptimizer.cpwcalcs.cpw">cpw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#paramsweeps">paramsweeps</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to CPWBragg’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Gareth Sion Jones.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/cpwcalcs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,10 +1,38 @@
+#!/usr/bin/env python
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from ResonatorOptimizer.cpwcalcs import cpw 
     
 class ParamSweeps():
+    """ A class for sweeping geometric parameters of a cpw
+    """
     def __init__(self,length,total_width,fo,er,h,t,pen_depth):
+        """
+            Constructor method - Initializes the cpw geometry
+
+            :type length: float
+            :param length: conductor length
+
+            :type total_width: float
+            :param width: conductor = 2*gap width
+                        
+            :type fo: float
+            :param fo: designed resonant frequency
+
+            :type er: float
+            :param er: relative permittivity of substrate
+
+            :type h: float
+            :param h: thickness of substrate
+
+            :type t: float
+            :param t: thickness of conductor thin film
+
+            :type pen_depth: float
+            :param pen_depth: magnetic penetration depth
+            """
         self.__length = length
         self.__total_width = total_width
         self.__fo = fo
@@ -15,6 +43,18 @@ class ParamSweeps():
         return
     
     def width_to_gap(self,minw,maxw,wit=0.2):
+        """ Calculates the transmission parameters for a given width and gap
+        range
+
+        :type minw: float
+        :param minw: min conductor width
+
+        :type maxw: float
+        :param maxw: max conductor width
+
+        :type wit: float
+        :param mwit: iterator
+        """
         Zcpw = []
         Zki = []
         wcpw = []
@@ -62,6 +102,11 @@ class ParamSweeps():
         return parameters
 
     def plot_params(self,params):
+        """ Plot the transmission parameters
+
+        :type params: pd dataframe
+        :param params: transmission parameters
+        """
 
         fig = plt.figure(figsize=(15,10))
         ax1 = plt.subplot(221)
